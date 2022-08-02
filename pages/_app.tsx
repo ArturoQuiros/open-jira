@@ -5,7 +5,7 @@ import { lightTheme, darkTheme } from "../themes";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={darkTheme}>
       <CssBaseline></CssBaseline>
       <Component {...pageProps} />
     </ThemeProvider>
