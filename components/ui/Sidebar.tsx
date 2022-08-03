@@ -13,7 +13,7 @@ import {
 import InboxOutlinedIcon from "@mui/icons-material/InboxOutlined";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 
-import { uiContext } from "../../context/ui";
+import { uiContext } from "../../context/ui/uiContext";
 
 const menuItems: string[] = ["Inbox", "Starred", "Send Email", "Drafts"];
 
