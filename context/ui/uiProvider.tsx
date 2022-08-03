@@ -1,36 +1,34 @@
-import { FC, useReducer } from 'react';
-import { UIContext, uiReducer } from './';
+import { FC, useReducer } from "react";
+import { uiContext, uiReducer } from "./";
 
 export interface UIState {
-    sidemenuOpen: boolean;
+  sidemenuOpen: boolean;
 }
-
 
 const UI_INITIAL_STATE: UIState = {
-    sidemenuOpen: false,
-}
+  sidemenuOpen: false,
+};
 
+export const UIProvider: FC = ({ children }) => {
+  const [state, dispatch] = useReducer(uiReducer, UI_INITIAL_STATE);
 
-export const UIProvider:FC = ({ children }) => {
+  const openSideMenu = () => {
+    dispatch({ type: "UI - Open Sidebar" });
+  };
 
-    const [state, dispatch] = useReducer( uiReducer, UI_INITIAL_STATE );
+  const closeSideMenu = () => dispatch({ type: "UI - Close Sidebar" });
 
+  return (
+    <uiContext.Provider
+      value={{
+        ...state,
 
-    const openSideMenu = () => {
-        dispatch({ type: 'UI - Open Sidebar' });
-    }
-
-    const closeSideMenu = () => dispatch({ type: 'UI - Close Sidebar' })
-
-    return (
-        <UIContext.Provider value={{
-            ...state,
-
-            // Methods
-            closeSideMenu,
-            openSideMenu,
-        }}>
-            { children }
-        </UIContext.Provider>
-    )
+        // Methods
+        closeSideMenu,
+        openSideMenu,
+      }}
+    >
+      {children}
+    </uiContext.Provider>
+  );
 };

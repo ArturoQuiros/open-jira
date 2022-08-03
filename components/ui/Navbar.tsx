@@ -2,10 +2,10 @@ import { useContext } from "react";
 
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import { UIContext } from "../../context/ui";
+import { uiContext } from "../../context/ui";
 
 export const Navbar = () => {
-  const { openSideMenu } = useContext(UIContext);
+  const { openSideMenu } = useContext(uiContext);
 
   return (
     <AppBar position="sticky">
