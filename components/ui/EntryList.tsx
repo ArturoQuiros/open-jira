@@ -18,7 +18,6 @@ export const EntryList: FC<Props> = ({ status }) => {
   );
 
   //render
-
   return (
     <div>
       <Paper
