@@ -4,7 +4,9 @@ type UIActionType =
   | { type: "UI - Open Sidebar" }
   | { type: "UI - Close Sidebar" }
   | { type: "Entry - isAdding" }
-  | { type: "Entry - isNotAdding" };
+  | { type: "Entry - isNotAdding" }
+  | { type: "Entry - isDragging" }
+  | { type: "Entry - isNotDragging" };
 
 export const uiReducer = (state: UIState, action: UIActionType): UIState => {
   switch (action.type) {
@@ -30,6 +32,18 @@ export const uiReducer = (state: UIState, action: UIActionType): UIState => {
       return {
         ...state,
         isAddingEntry: false,
+      };
+
+    case "Entry - isDragging":
+      return {
+        ...state,
+        isDragging: true,
+      };
+
+    case "Entry - isNotDragging":
+      return {
+        ...state,
+        isDragging: false,
       };
 
     default:
