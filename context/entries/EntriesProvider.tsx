@@ -33,8 +33,9 @@ const initalState: EntriesState = {
 
 export const EntriesProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(entriesReducer, initalState);
+
+  //-----------------------Add
   const addNewEntry = (description: string) => {
-    //-----------------------
     const NewEntry: Entry = {
       _id: uuidv4(),
       description: description,
@@ -43,6 +44,11 @@ export const EntriesProvider: FC = ({ children }) => {
     };
 
     dispatch({ type: "addEntry", payload: NewEntry });
+  };
+
+  //-----------------------Update
+  const updateEntry = (entry: Entry) => {
+    dispatch({ type: "updateEntry", payload: entry });
   };
 
   return (
@@ -54,6 +60,7 @@ export const EntriesProvider: FC = ({ children }) => {
 
         //methonds
         addNewEntry,
+        updateEntry,
       }}
     >
       {children}

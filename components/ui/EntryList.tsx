@@ -13,18 +13,23 @@ interface Props {
 
 export const EntryList: FC<Props> = ({ status }) => {
   //-------------------Entries
-  const { entries } = useContext(EntriesContext);
+  const { entries, updateEntry } = useContext(EntriesContext);
   const entriesByStatus = useMemo(
     () => entries.filter((entrie) => entrie.status === status),
     [entries]
   );
 
   //---------------------Drag n Drop
-  const { setIsDraggingEntry, setIsNotDraggingEntry, isDragging } =
-    useContext(uiContext);
+  const { isDragging, setIsNotDraggingEntry } = useContext(uiContext);
 
   const onDropEntry = (event: DragEvent<HTMLDivElement>) => {
     const id = event.dataTransfer.getData("entryId");
+
+    const entry = entries.find((e) => e._id === id)!;
+    entry.status = status;
+
+    updateEntry(entry);
+    setIsNotDraggingEntry();
   };
 
   const allowDrop = (event: DragEvent<HTMLDivElement>) => {
