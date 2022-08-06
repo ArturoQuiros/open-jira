@@ -15,9 +15,7 @@ const HomePage: NextPage = () => {
             }}
           >
             <CardHeader title="Pending" />
-            <CardContent>
-              <EntryList></EntryList>
-            </CardContent>
+            <EntryList status="pending" />
           </Card>
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -26,10 +24,8 @@ const HomePage: NextPage = () => {
               height: "calc(100vh - 100px)",
             }}
           >
-            <CardHeader title="Pending" />
-            <CardContent>
-              <EntryList></EntryList>
-            </CardContent>
+            <CardHeader title="In Progress" />
+            <EntryList status="in-progress"></EntryList>
           </Card>
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -38,10 +34,8 @@ const HomePage: NextPage = () => {
               height: "calc(100vh - 100px)",
             }}
           >
-            <CardHeader title="Pending" />
-            <CardContent>
-              <EntryList></EntryList>
-            </CardContent>
+            <CardHeader title="Finished" />
+            <EntryList status="finished"></EntryList>
           </Card>
         </Grid>
       </Grid>

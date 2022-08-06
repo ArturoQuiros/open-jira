@@ -11,19 +11,19 @@ const initalState: EntriesState = {
   entries: [
     {
       _id: uuidv4(),
-      description: "Terminar el cuso de Next",
+      description: "Pendiente: Terminar el cuso de Node",
       status: "pending",
       createdAt: Date.now(),
     },
     {
       _id: uuidv4(),
-      description: "Terminar el cuso de React Avanzado",
+      description: "En progreso: Terminar el cuso de Next",
       status: "in-progress",
       createdAt: Date.now() - 1,
     },
     {
       _id: uuidv4(),
-      description: "Terminar el cuso de Node",
+      description: "Finalizado: Terminar el cuso de React",
       status: "finished",
       createdAt: Date.now() - 2,
     },
