@@ -3,15 +3,16 @@ import { Box, Button, TextField } from "@mui/material";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { EntriesProvider } from "../../context/entries/EntriesProvider";
 import { EntriesContext } from "../../context/entries/EntriesContext";
+import { uiContext } from "../../context/ui/uiContext";
 
 export const NewEntry = () => {
   //-------------------------------------------
   const { addNewEntry } = useContext(EntriesContext);
+  const { isAddingEntry, setIsAddingEntry, setIsNotAddingEntry } =
+    useContext(uiContext);
 
   //-------------------------------------------
-  const [isAdding, setIsAdding] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [touched, setTouched] = useState(false);
 
@@ -27,13 +28,13 @@ export const NewEntry = () => {
 
     addNewEntry(inputValue);
     setTouched(false);
-    setIsAdding(false);
+    setIsNotAddingEntry();
     setInputValue("");
   };
 
   const onCancel = () => {
     setTouched(false);
-    setIsAdding(false);
+    setIsNotAddingEntry();
     setInputValue("");
   };
   //----------------------------------------------
@@ -45,7 +46,7 @@ export const NewEntry = () => {
         paddingX: 1,
       }}
     >
-      {isAdding ? (
+      {isAddingEntry ? (
         <>
           <TextField
             value={inputValue}
@@ -94,9 +95,7 @@ export const NewEntry = () => {
             variant="contained"
             color="secondary"
             startIcon={<AddOutlinedIcon />}
-            onClick={() => {
-              setIsAdding(true);
-            }}
+            onClick={setIsAddingEntry}
           >
             New Entry
           </Button>
