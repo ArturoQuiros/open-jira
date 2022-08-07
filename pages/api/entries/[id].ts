@@ -18,7 +18,7 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
 
   switch (req.method) {
     case "GET":
-      return;
+      return getEntryById(req, res);
 
     case "PUT":
       return updateEntryById(req, res);
@@ -59,5 +59,20 @@ const updateEntryById = async (
   } catch (error: any) {
     await db.disconnect();
     res.status(400).json({ message: error.errors.status.message });
+  }
+};
+
+const getEntryById = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { id } = req.query;
+
+  await db.connect();
+  const myEntry = await Entry.findById(id);
+
+  await db.disconnect();
+
+  if (!myEntry) {
+    return res.status(400).json({ message: "invalid entry" });
+  } else {
+    res.status(200).json({ message: myEntry });
   }
 };
