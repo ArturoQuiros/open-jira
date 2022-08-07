@@ -1,3 +1,4 @@
+import { DragEvent, FC, useContext } from "react";
 import {
   Card,
   CardActionArea,
@@ -5,8 +6,8 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import { DragEvent, FC, useContext } from "react";
-import { uiContext } from "../../context/ui";
+
+import { UIContext } from "../../context/ui/UIContext";
 import { Entry } from "../../interfaces";
 
 interface Props {
@@ -14,27 +15,25 @@ interface Props {
 }
 
 export const EntryCard: FC<Props> = ({ entry }) => {
-  //-----------------------------Dragging
+  const { startDragging, endDragging } = useContext(UIContext);
 
-  const { setIsDraggingEntry, setIsNotDraggingEntry, isDragging } =
-    useContext(uiContext);
+  const onDragStart = (event: DragEvent) => {
+    event.dataTransfer.setData("text", entry._id);
 
-  const onDragStart = (event: DragEvent<HTMLDivElement>) => {
-    event.dataTransfer.setData("entryId", entry._id);
-    setIsDraggingEntry();
+    startDragging();
   };
 
-  const onDragEnd = (event: DragEvent<HTMLDivElement>) => {
-    setIsNotDraggingEntry();
+  const onDragEnd = () => {
+    endDragging();
   };
-  //-----------------------------
 
   return (
     <Card
+      sx={{ marginBottom: 1 }}
+      // Eventos de drag
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      sx={{ marginBottom: 1 }}
     >
       <CardActionArea>
         <CardContent>
@@ -42,14 +41,11 @@ export const EntryCard: FC<Props> = ({ entry }) => {
             {entry.description}
           </Typography>
         </CardContent>
+
         <CardActions
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            paddingRight: 2,
-          }}
+          sx={{ display: "flex", justifyContent: "end", paddingRight: 2 }}
         >
-          <Typography variant="body2"> Hace 30 mins</Typography>
+          <Typography variant="body2">hace 30 minutos</Typography>
         </CardActions>
       </CardActionArea>
     </Card>

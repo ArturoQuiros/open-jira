@@ -1,1 +1,3 @@
-export { default as entriesAPI } from "./entriesAPI";
+
+
+export { default as entriesApi } from './entriesApi';

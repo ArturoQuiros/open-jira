@@ -4,7 +4,7 @@ import { Entry } from "../../interfaces";
 interface ContextProps {
   entries: Entry[];
 
-  //methods
+  // Methods
   addNewEntry: (description: string) => void;
   updateEntry: (entry: Entry) => void;
 }

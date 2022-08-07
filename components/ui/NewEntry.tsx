@@ -1,105 +1,74 @@
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, useState, useContext } from "react";
 import { Box, Button, TextField } from "@mui/material";
+
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { EntriesContext } from "../../context/entries/EntriesContext";
-import { uiContext } from "../../context/ui/uiContext";
+import AddIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+
+import { EntriesContext } from "../../context/entries";
+import { UIContext } from "../../context/ui";
 
 export const NewEntry = () => {
-  //-------------------------------------------
   const { addNewEntry } = useContext(EntriesContext);
-  const { isAddingEntry, setIsAddingEntry, setIsNotAddingEntry } =
-    useContext(uiContext);
+  const { isAddingEntry, setIsAddingEntry } = useContext(UIContext);
 
-  //-------------------------------------------
   const [inputValue, setInputValue] = useState("");
   const [touched, setTouched] = useState(false);
 
-  const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const onTextFieldChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
   };
 
   const onSave = () => {
-    if (inputValue.trim().length === 0) {
-      setTouched(true);
-      return;
-    }
+    if (inputValue.length === 0) return;
 
     addNewEntry(inputValue);
+    setIsAddingEntry(false);
     setTouched(false);
-    setIsNotAddingEntry();
     setInputValue("");
   };
-
-  const onCancel = () => {
-    setTouched(false);
-    setIsNotAddingEntry();
-    setInputValue("");
-  };
-  //----------------------------------------------
 
   return (
-    <Box
-      sx={{
-        marginBottom: 2,
-        paddingX: 1,
-      }}
-    >
+    <Box sx={{ marginBottom: 2, paddingX: 2 }}>
       {isAddingEntry ? (
         <>
           <TextField
-            value={inputValue}
-            onChange={onInputChange}
-            label="New Entry"
-            error={inputValue.trim().length <= 0 && touched}
-            helperText={
-              inputValue.trim().length <= 0 && touched
-                ? "Please check your entry"
-                : ""
-            }
-            onBlur={() => setTouched(true)}
             fullWidth
+            sx={{ marginTop: 2, marginBottom: 1 }}
+            placeholder="Nueva entrada"
             autoFocus
             multiline
-            sx={{
-              marginTop: 2,
-              marginBottom: 1,
-            }}
-          ></TextField>
+            label="Nueva entrada"
+            helperText={inputValue.length <= 0 && touched && "Ingrese un valor"}
+            error={inputValue.length <= 0 && touched}
+            value={inputValue}
+            onChange={onTextFieldChanged}
+            onBlur={() => setTouched(true)}
+          />
 
           <Box display="flex" justifyContent="space-between">
-            <Button
-              variant="outlined"
-              color="secondary"
-              startIcon={<CancelOutlinedIcon />}
-              onClick={onCancel}
-            >
-              Cancel
+            <Button variant="text" onClick={() => setIsAddingEntry(false)}>
+              Cancelar
             </Button>
 
             <Button
-              variant="contained"
+              variant="outlined"
               color="secondary"
-              startIcon={<SaveOutlinedIcon />}
+              endIcon={<SaveOutlinedIcon />}
               onClick={onSave}
             >
-              Save
+              Guardar
             </Button>
           </Box>
         </>
       ) : (
-        <>
-          <Button
-            fullWidth
-            variant="contained"
-            color="secondary"
-            startIcon={<AddOutlinedIcon />}
-            onClick={setIsAddingEntry}
-          >
-            New Entry
-          </Button>
-        </>
+        <Button
+          startIcon={<AddIcon />}
+          fullWidth
+          variant="outlined"
+          onClick={() => setIsAddingEntry(true)}
+        >
+          Agregar Tarea
+        </Button>
       )}
     </Box>
   );

@@ -1,5 +1,5 @@
 import { FC, useReducer } from "react";
-import { uiContext, uiReducer } from "./";
+import { UIContext, uiReducer } from "./";
 
 export interface UIState {
   sidemenuOpen: boolean;
@@ -16,48 +16,40 @@ const UI_INITIAL_STATE: UIState = {
 export const UIProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(uiReducer, UI_INITIAL_STATE);
 
-  //------------------------------sidebar
-
   const openSideMenu = () => {
     dispatch({ type: "UI - Open Sidebar" });
   };
 
   const closeSideMenu = () => dispatch({ type: "UI - Close Sidebar" });
 
-  //-------------------------------entrys
-  const setIsAddingEntry = () => {
-    dispatch({ type: "Entry - isAdding" });
+  const setIsAddingEntry = (isAdding: boolean) => {
+    dispatch({ type: "UI - Set isAddingEntry", payload: isAdding });
   };
 
-  const setIsNotAddingEntry = () => {
-    dispatch({ type: "Entry - isNotAdding" });
+  const startDragging = () => {
+    dispatch({ type: "UI - Start Dragging" });
   };
 
-  //----------------------------dragging
-
-  const setIsDraggingEntry = () => {
-    dispatch({ type: "Entry - isDragging" });
-  };
-
-  const setIsNotDraggingEntry = () => {
-    dispatch({ type: "Entry - isNotDragging" });
+  const endDragging = () => {
+    dispatch({ type: "UI - End Dragging" });
   };
 
   return (
-    <uiContext.Provider
+    <UIContext.Provider
       value={{
         ...state,
 
         // Methods
         closeSideMenu,
         openSideMenu,
+
         setIsAddingEntry,
-        setIsNotAddingEntry,
-        setIsDraggingEntry,
-        setIsNotDraggingEntry,
+
+        endDragging,
+        startDragging,
       }}
     >
       {children}
-    </uiContext.Provider>
+    </UIContext.Provider>
   );
 };

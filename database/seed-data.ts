@@ -11,19 +11,22 @@ interface SeedEntry {
 export const seedData: SeedData = {
   entries: [
     {
-      description: "Pendiente: Terminar el cuso de Node",
+      description:
+        "Pendiente: Proident dolor duis elit sunt qui dolor laborum veniam ea laboris qui consequat.",
       status: "pending",
       createdAt: Date.now(),
     },
     {
-      description: "En progreso: Terminar el cuso de Next",
+      description:
+        "En-Progreso Veniam in cupidatat adipisicing Lorem sunt est est ex cillum laboris fugiat officia fugiat.",
       status: "in-progress",
-      createdAt: Date.now() - 1,
+      createdAt: Date.now() - 1000000,
     },
     {
-      description: "Finalizado: Terminar el cuso de React",
+      description:
+        "Terminadas: Commodo veniam aliqua tempor officia officia non laborum.",
       status: "finished",
-      createdAt: Date.now() - 2,
+      createdAt: Date.now() - 100000,
     },
   ],
 };

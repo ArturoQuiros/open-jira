@@ -8,10 +8,11 @@ interface ContextProps {
   // Methods
   closeSideMenu: () => void;
   openSideMenu: () => void;
-  setIsAddingEntry: () => void;
-  setIsNotAddingEntry: () => void;
-  setIsDraggingEntry: () => void;
-  setIsNotDraggingEntry: () => void;
+
+  setIsAddingEntry: (isAdding: boolean) => void;
+
+  endDragging: () => void;
+  startDragging: () => void;
 }
 
-export const uiContext = createContext({} as ContextProps);
+export const UIContext = createContext({} as ContextProps);
