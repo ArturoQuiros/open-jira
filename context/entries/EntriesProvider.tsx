@@ -27,15 +27,9 @@ export const EntriesProvider: FC = ({ children }) => {
   };
 
   //-----------------------Add
-  const addNewEntry = (description: string) => {
-    const NewEntry: Entry = {
-      _id: uuidv4(),
-      description: description,
-      status: "pending",
-      createdAt: Date.now(),
-    };
-
-    dispatch({ type: "addEntry", payload: NewEntry });
+  const addNewEntry = async (description: string) => {
+    const { data } = await entriesAPI.post<Entry>("/entries", { description });
+    dispatch({ type: "addEntry", payload: data });
   };
 
   //-----------------------Update
