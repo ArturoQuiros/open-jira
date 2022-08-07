@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../database";
+import { db, seedData } from "../../database";
+import { Entry } from "../../models";
 
 type Data = {
   ok: boolean;
@@ -22,6 +23,11 @@ export default async function handler(
   }
   //db connection
   await db.connect();
+  //db Wipe
+  await Entry.deleteMany();
+  //db seed
+  await Entry.insertMany(seedData.entries);
+  //db disconnect
   await db.disconnect();
 
   //normal response
