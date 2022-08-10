@@ -1,3 +1,5 @@
+import { GetServerSideProps } from "next";
+
 import {
   Button,
   capitalize,
@@ -15,17 +17,31 @@ import {
   TextField,
 } from "@mui/material";
 import { Layout } from "../../components/layouts";
-import { EntryStatus } from "../../interfaces";
+import { Entry, EntryStatus } from "../../interfaces";
 import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
 import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FC, useContext, useMemo, useState } from "react";
+import { dbEntries } from "../../database";
+import { EntriesContext } from "../../context/entries";
+import { getFormatDateToNow } from "../../helpers";
 
 const validStatus: EntryStatus[] = ["pending", "in-progress", "finished"];
 
-export const EntryPage = () => {
-  const [inputValue, setInputValue] = useState("");
-  const [status, setStatus] = useState<EntryStatus>("pending");
+interface Props {
+  entry: Entry;
+}
+
+export const EntryPage: FC<Props> = ({ entry }) => {
+  const [inputValue, setInputValue] = useState(entry.description);
+  const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState(false);
+
+  const { updateEntry, deleteEntry } = useContext(EntriesContext);
+
+  const isNotValid = useMemo(
+    () => inputValue.trim().length <= 0 && touched,
+    [inputValue, touched]
+  );
 
   const onTextFieldChanged = (event: ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
@@ -36,17 +52,36 @@ export const EntryPage = () => {
   };
 
   const onSave = () => {
+    if (inputValue.trim().length === 0) return;
+    const updatedEntry: Entry = {
+      ...entry,
+      status,
+      description: inputValue,
+    };
+    updateEntry(updatedEntry, true);
+
+    setTouched(true);
+  };
+
+  const onDelete = () => {
+    const deletedEntry: Entry = {
+      ...entry,
+      status,
+      description: inputValue,
+    };
+    deleteEntry(deletedEntry, true);
+
     setTouched(true);
   };
 
   return (
-    <Layout title="entry">
+    <Layout title={`My Entry`}>
       <Grid container justifyContent="center" sx={{ marginTop: 2 }}>
         <Grid item xs={12} sm={8} md={6}>
           <Card>
             <CardHeader
-              title={`Entry: ${inputValue}`}
-              subheader={"Created xxxx ago"}
+              title={`Entry #${entry._id}`}
+              subheader={getFormatDateToNow(entry.createdAt) + " ago"}
             ></CardHeader>
             <CardContent>
               <TextField
@@ -55,9 +90,12 @@ export const EntryPage = () => {
                 placeholder="New Entry"
                 autoFocus
                 multiline
-                label="New Entry"
+                label="Description"
                 value={inputValue}
                 onChange={onTextFieldChanged}
+                helperText={isNotValid && "Ingrese un valor"}
+                error={isNotValid}
+                onBlur={() => setTouched(true)}
               />
 
               <FormControl>
@@ -67,7 +105,6 @@ export const EntryPage = () => {
                   sx={{ display: "flex", justifyContent: "space-between" }}
                   value={status}
                   onChange={onStatusChanged}
-                  onClick={onSave}
                 >
                   {validStatus.map((status) => (
                     <FormControlLabel
@@ -86,6 +123,8 @@ export const EntryPage = () => {
                 startIcon={<SaveOutlinedIcon />}
                 variant="contained"
                 fullWidth
+                onClick={onSave}
+                disabled={inputValue.trim().length <= 0}
               >
                 Save
               </Button>
@@ -94,6 +133,8 @@ export const EntryPage = () => {
                 startIcon={<DeleteForeverOutlinedIcon />}
                 variant="outlined"
                 fullWidth
+                onClick={onDelete}
+                disabled={isNotValid}
               >
                 Delete
               </Button>
@@ -103,6 +144,27 @@ export const EntryPage = () => {
       </Grid>
     </Layout>
   );
+};
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { id } = params as { id: string };
+
+  const entry = await dbEntries.getEntryById(id);
+
+  if (!entry) {
+    return {
+      redirect: { destination: "/", permanent: false },
+    };
+  }
+
+  return {
+    props: {
+      entry,
+    },
+  };
 };
 
 export default EntryPage;
